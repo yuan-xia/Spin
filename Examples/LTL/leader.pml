@@ -24,15 +24,17 @@
  */
 
 byte nr_leaders = 0;
+bool leader_chosen = false;
 
-ltl p0	{ <> (nr_leaders > 0) }
-ltl p1	{ <>[] (nr_leaders == 1) }
-ltl p2	{ [] (nr_leaders == 0 U nr_leaders == 1) }
-ltl p3	{ ![] (nr_leaders == 0) }
+//ltl p0	{ <> (nr_leaders > 0) }
+//ltl p1	{ <>[] (nr_leaders == 1) }
+//ltl p2	{ [] (nr_leaders == 0 U nr_leaders == 1) }
+//ltl p3	{ ![] (nr_leaders == 0) }
+ltl p5	{ [] ((nr_leaders == 0 && !leader_chosen) U (nr_leaders == 1&&leader_chosen)) }
 
 #define N	5	/* number of processes in the ring */
 #define L	10	/* 2xN */
-byte I;
+
 
 mtype = { one, two, winner };
 chan q[N] = [L] of { mtype, byte};
@@ -80,9 +82,13 @@ end:	do
 		:: nr != mynumber ->
 			printf("MSC: LOST\n");
 		:: else ->
+		    atomic {
 			printf("MSC: LEADER\n");
 			nr_leaders++;
 			assert(nr_leaders == 1)
+			leader_chosen = true;
+			printf("State changed: nr_leaders: %d leader_chosen: %d\n", nr_leaders,leader_chosen);
+			}
 		fi;
 		if
 		:: know_winner
@@ -94,6 +100,7 @@ end:	do
 
 init {
 	byte proc;
+	byte I;
 	byte Ini[6];	/* N<=6 randomize the process numbers */
 	atomic {
 

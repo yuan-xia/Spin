@@ -206,5 +206,5 @@ init
 }
 
 ltl p1 { ( len(flow_to_ses[1]) > 0 -> flow_to_ses[1]?[white]) U ( flow_to_ses[1]?[red] ) }
-ltl p2 { (!(flow_to_ses[1]?[blue])) U (flow_to_ses[1]?[red]) }
-ltl p3 { <> (flow_to_ses[1]?[blue]) }
+//ltl p2 { (!(flow_to_ses[1]?[blue])) U (flow_to_ses[1]?[red]) }
+//ltl p3 { <> (flow_to_ses[1]?[blue]) }

@@ -1,0 +1,9 @@
+never invariant {    /* !([] (((ncrit==0)) || ((ncrit==1)))) */
+T0_init:
+	do
+	:: atomic { (! ((((ncrit==0)) || ((ncrit==1))))) -> assert(!(! ((((ncrit==0)) || ((ncrit==1)))))) }
+	:: (1) -> goto T0_init
+	od;
+accept_all:
+	skip
+}

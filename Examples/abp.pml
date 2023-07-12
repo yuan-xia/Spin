@@ -8,11 +8,14 @@ mtype = { msg0, msg1, ack0, ack1 };
 
 chan sender = [1] of { mtype };
 chan receiver = [1] of { mtype };
+int cnt = 0;
+int total = 0;
+int sum = 0;
 
 inline phase(msg, good_ack, bad_ack)
 {
 	do
-	:: sender?good_ack -> break
+	:: sender?good_ack -> cnt++; sum =sum+ cnt; total = total+sum;break
 	:: sender?bad_ack
 	:: timeout -> 
 		if
@@ -25,8 +28,8 @@ inline phase(msg, good_ack, bad_ack)
 inline recv(cur_msg, cur_ack, lst_msg, lst_ack)
 {
 	do
-	:: receiver?cur_msg -> sender!cur_ack; break /* accept */
-	:: receiver?lst_msg -> sender!lst_ack
+	:: receiver?cur_msg -> sender!cur_ack;  break /* accept */
+	:: receiver?lst_msg -> sender!lst_ack;
 	od;
 } 
 
@@ -34,7 +37,7 @@ active proctype Sender()
 {
 	do
 	:: phase(msg1, ack1, ack0);
-	   phase(msg0, ack0, ack1)
+	   phase(msg0, ack0, ack1);
 	od
 }
 
@@ -42,6 +45,8 @@ active proctype Receiver()
 {
 	do
 	:: recv(msg1, ack1, msg0, ack0);
-	   recv(msg0, ack0, msg1, ack1)
+	   recv(msg0, ack0, msg1, ack1);
 	od
 }
+
+ltl communication_property { [] ((len(receiver)==0) || (len(sender)==0)) }

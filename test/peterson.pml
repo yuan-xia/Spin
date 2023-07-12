@@ -11,7 +11,7 @@ again:
 	turn = _pid;
 	(flag[1 - _pid] == 0 || turn == 1 - _pid);
 
-	ncrit++;
+	ncrit = 2;
 	assert(ncrit == 1);	/* critical section */
 	ncrit--;
 
@@ -19,3 +19,8 @@ again:
 	goto again
 }
 
+/*
+ltl invariant { [] ((ncrit == 0 ) || ((ncrit == 1) && (((flag[0]==1) && ((flag[1]==1) || (turn==0))) || ((flag[0]==0) && (flag[1]==1) && (turn==1))))) } 
+*/
+
+ltl invariant { [] ((ncrit==0) || (ncrit==1)) }

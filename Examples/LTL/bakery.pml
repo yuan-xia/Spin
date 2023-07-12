@@ -22,3 +22,4 @@ CS:		/* critical section */
  */
 
 ltl invariant { [] ((P@CS) -> (mutex == 1)) }
+//ltl property1 { [] ((P@CS) -> X (!(P@CS))) }

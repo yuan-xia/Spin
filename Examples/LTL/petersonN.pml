@@ -42,4 +42,5 @@ cs:	assert(ncrit == 1);	/* critical section */
 	goto again
 }
 
-ltl bounded_bypass { user[1]@again -> <> user[1]@cs }
+//ltl bounded_bypass { user[1]@again -> <> user[1]@cs }
+ltl mutual_exclusion { [] (!(ncrit > 1 )) }
